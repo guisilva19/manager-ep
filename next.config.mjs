@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "models.readyplayer.me",
+        hostname: "",
         pathname: "**",
       },
     ],
