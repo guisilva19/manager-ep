@@ -2,7 +2,6 @@
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { Button, Input } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaLogin } from "@/utils/schema";

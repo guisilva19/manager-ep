@@ -2,7 +2,7 @@
 import SideBar from "@/components/SideBar/SideBar";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Login from "../page";
+import Loading from "@/components/Loading/Loading";
 
 export default function RootLayout({
   children,
@@ -25,13 +25,15 @@ export default function RootLayout({
   }, [router]);
 
   if (isAuthenticated === null || !isAuthenticated) {
-    return <Login />;
+    return <Loading />;
   }
 
   return (
     <>
-      <SideBar />
-      {children}
+      <main className="w-screen h-screen flex overflow-x-hidden">
+        <SideBar />
+        <div>{children}</div>
+      </main>
     </>
   );
 }
