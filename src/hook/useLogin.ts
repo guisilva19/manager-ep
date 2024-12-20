@@ -1,28 +1,36 @@
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 
 export class useLogin {
-  static async login(data: { email: string; senha: string }) {
+  static async login(data: { email: string; senha: string }, navigate: any) {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      await toast.promise(
+        (async () => {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
 
-      if (!response.ok) {
-        throw new Error("Credenciais inválidas");
-      }
+          if (!response.ok) {
+            throw new Error("Credenciais inválidas");
+          }
 
-      const result = await response.json();
-      localStorage.setItem("access_ep", result.token);
-      toast.success("Login feito com sucesso!");
+          const result = await response.json();
+          localStorage.setItem("access_ep", result.token);
+          return result;
+        })(),
+        {
+          loading: "Carregando...",
+          success: "Login feito com sucesso!",
+          error: "Credenciais inválidas",
+        }
+      );
 
-      window.location.href = "/dashboard";
+      navigate.push("/dashboard"); // Navega sem recarregar a página
     } catch (error) {
-      console.error(error);
-      toast.error("Credenciais inválidas");
+      console.error("Erro durante o login:", error); // Loga o erro no console
     }
   }
 }

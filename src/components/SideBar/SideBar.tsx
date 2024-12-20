@@ -92,4 +92,9 @@ const pages = [
     href: "/projetos",
     icon: <ClipboardList className="text-white" />,
   },
+  {
+    title: "Orçamentos",
+    href: "/orcamentos",
+    icon: <ClipboardList className="text-white" />,
+  },
 ];

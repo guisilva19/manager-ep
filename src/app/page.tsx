@@ -6,8 +6,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaLogin } from "@/utils/schema";
 import { useLogin } from "@/hook/useLogin";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
 
   const {
     register,
@@ -23,7 +25,9 @@ export default function Login() {
         <Image src={logo} alt="LOGO" width={150} height={150} />
       </figure>
       <form
-        onSubmit={handleSubmit(useLogin.login)}
+        onSubmit={handleSubmit((data) => {
+          useLogin.login(data, router);
+        })}
         className="w-96 h-96 flex flex-col items-center gap-4"
       >
         <Input
@@ -35,6 +39,7 @@ export default function Login() {
         <Input
           variant="flat"
           label="Senha"
+          type="password"
           className="w-[320px]"
           {...register("senha")}
         />
