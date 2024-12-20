@@ -7,7 +7,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "api/:path*",
+        source: "/api/:path*",
         destination: `https://electric-backend-production.up.railway.app/:path*`,
       },
     ];
