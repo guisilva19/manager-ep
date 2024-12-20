@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "",
-        pathname: "**",
-      },
-    ],
+    // Remova a configuração de remotePatterns se não for necessária
   },
 
   async rewrites() {
