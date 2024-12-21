@@ -1,12 +1,10 @@
+import ApprovalTable from "@/components/ApprovalTable/ApprovalTable";
 
 export default function Homologacoes() {
   return (
     <>
       <main className="w-[calc(100vw-288px)] px-10 py-10 gap-4 flex flex-col">
-        <h2 className="text-3xl font-bold">Homologações</h2>
-        <div className="flex w-full justify-between">
-         
-        </div>
+        <ApprovalTable />
       </main>
     </>
   );

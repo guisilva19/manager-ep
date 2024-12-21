@@ -11,6 +11,7 @@ import { redirect } from "@/utils/redirect";
 import { logout } from "@/utils/logout";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SideBar() {
   const [isExiting, setIsExiting] = useState(false); // Controla o estado da animação de saída
@@ -65,7 +66,22 @@ export default function SideBar() {
 
         <button
           className="w-full h-12 hover:bg-white/20 duration-250 cursor-pointer flex gap-2 items-center px-6 absolute bottom-0"
-          onClick={logout}
+          onClick={() => {
+            toast((t) => (
+              <div className="flex items-center justify-center gap-4">
+                <span>Deseja sair?</span>
+                <button
+                className="bg-slate-100 rounded-lg p-2 hover:bg-slate-300"
+                  onClick={() => {
+                    localStorage.removeItem("access_ep");
+                    window.location.href = "/";
+                  }}
+                >
+                  <LogOut color="#860303" />
+                </button>
+              </div>
+            ));
+          }}
         >
           <LogOut className="text-white" />
           <p className="text-white">Logout</p>
@@ -87,11 +103,11 @@ const pages = [
     href: "/homologacoes",
     icon: <ScrollText className="text-white" />,
   },
-  {
-    title: "Projetos",
-    href: "/projetos",
-    icon: <ClipboardList className="text-white" />,
-  },
+  // {
+  //   title: "Projetos",
+  //   href: "/projetos",
+  //   icon: <ClipboardList className="text-white" />,
+  // },
   {
     title: "Orçamentos",
     href: "/orcamentos",
