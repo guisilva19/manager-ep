@@ -8,10 +8,10 @@ import {
   ScrollText,
 } from "lucide-react";
 import { redirect } from "@/utils/redirect";
-import { logout } from "@/utils/logout";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import logout from "@/utils/logout";
 
 export default function SideBar() {
   const [isExiting, setIsExiting] = useState(false); // Controla o estado da animação de saída
@@ -72,10 +72,7 @@ export default function SideBar() {
                 <span>Deseja sair?</span>
                 <button
                 className="bg-slate-100 rounded-lg p-2 hover:bg-slate-300"
-                  onClick={() => {
-                    localStorage.removeItem("access_ep");
-                    window.location.href = "/";
-                  }}
+                  onClick={logout}
                 >
                   <LogOut color="#860303" />
                 </button>
