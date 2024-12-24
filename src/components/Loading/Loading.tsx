@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <>
       <main className="w-screen h-screen flex items-center justify-center">
-        <Spinner color="warning" label="Loading..." />
+        <Spinner color="warning" label="Carregando..." />
       </main>
     </>
   );

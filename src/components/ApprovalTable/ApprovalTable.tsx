@@ -243,7 +243,7 @@ const ApprovalTable = () => {
         </table>
       </div>
 
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center mt-10">
         <Pagination
           showControls
           initialPage={1}
