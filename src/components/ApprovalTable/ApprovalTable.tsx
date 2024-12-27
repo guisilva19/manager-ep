@@ -1,131 +1,115 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CheckCircle,
   Clock,
   List,
   Mail,
   Phone,
-  DollarSign,
-  Calendar,
   User,
   FileDigit,
   SlidersHorizontal,
 } from "lucide-react";
 import { Pagination } from "@nextui-org/react";
+import { useApproval } from "@/hook/useApproval";
+import { useRouter } from "next/navigation";
+import LoadingPartial from "../LoadingPartial/Loading";
+
+interface Data {
+  items: Approval;
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+interface Approval {
+  id: string;
+  nome: string;
+  email: string;
+  ampliacao: boolean;
+  telefone: string;
+  link_payment: string;
+  status_payment: boolean;
+  cabo_do_padrao: string;
+  carga_instalada: string | null;
+  disjuntor_do_padrao: string | null;
+  distancia_entre_inversor_e_distribuicao: string | null;
+  modelo_do_inversor_homologado: string | null;
+  modelo_do_inversor_inserido: string | null;
+  modelo_do_modulo_homologado: string | null;
+  modelo_do_modulo_inserido: string | null;
+  numero_conta_contrato: string;
+  outras_conta_recebera_credito: boolean;
+  quantidade_inversores_homologados: string | null;
+  quantidade_inversores_inseridos: string | null;
+  quantidade_medidores: string | null;
+  quantidade_modulos_homologados: string | null;
+  quantidade_modulos_inseridos: string | null;
+  tensao_de_fornecimento: string | null;
+  tipo_de_ligacao: string;
+  total_de_inversores: string | null;
+  total_de_modulos: string | null;
+  transformador: boolean;
+  contas_receber_credito: any[];
+  documentos: any[];
+}
 
 const ApprovalTable = () => {
+  const router = useRouter();
+
+  const { list } = useApproval();
+
+  const [approvals, setApprovals] = useState<Approval[]>([]);
+  const [data, setData] = useState<Data>({} as Data);
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState(0);
 
-  const budgets = [
-    {
-      id: 1,
-      nome: "João Silva",
-      email: "joao@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 2,
-      nome: "Maria Oliveira",
-      email: "maria@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: false, // Aguardando
-    },
-    {
-      id: 3,
-      nome: "Carlos Pereira",
-      email: "carlos@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 4,
-      nome: "João Silva",
-      email: "joao@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 5,
-      nome: "Maria Oliveira",
-      email: "maria@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: false, // Aguardando
-    },
-    {
-      id: 6,
-      nome: "Carlos Pereira",
-      email: "carlos@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 7,
-      nome: "João Silva",
-      email: "joao@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 8,
-      nome: "Maria Oliveira",
-      email: "maria@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: false, // Aguardando
-    },
-    {
-      id: 9,
-      nome: "Carlos Pereira",
-      email: "carlos@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 10,
-      nome: "João Silva",
-      email: "joao@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-    {
-      id: 11,
-      nome: "Maria Oliveira",
-      email: "maria@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: false, // Aguardando
-    },
-    {
-      id: 12,
-      nome: "Carlos Pereira",
-      email: "carlos@email.com",
-      telefone: "(77) 99957-7372",
-      contaContrato: "1234567789",
-      status: true, // Concluído
-    },
-  ];
+  const [loading, setLoading] = useState(true);
 
-  // Estado para o filtro
-  const [filter, setFilter] = useState("Todas");
+  useEffect(() => {
+    get();
+  }, [status]);
 
-  // Função para filtrar os dados
-  const filteredBudgets =
-    filter === "Todas"
-      ? budgets
-      : budgets.filter((budget) =>
-          filter === "Concluidas" ? budget.status : !budget.status
-        );
+  const get = async () => {
+    try {
+      resetSearch();
+      const result = await list(page, status);
+      setData(result);
+      setApprovals(result.items);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getWithNextPage();
+  }, [page]);
+
+  const getWithNextPage = async () => {
+    try {
+      const result = await list(page, status);
+      setData(result);
+      setApprovals(result.items);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetSearch = () => {
+    setPage(1);
+    setLoading(true);
+  };
+
+  const alterStatus = (sts: number) => {
+    resetSearch();
+    setStatus(sts);
+  };
+
+  const alterPage = (newPage: number) => {
+    setLoading(true);
+    setPage(newPage);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -138,33 +122,33 @@ const ApprovalTable = () => {
         <div className="flex gap-4">
           <button
             className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              filter === "Todas"
+              status === 0
                 ? "bg-primary text-white"
                 : "bg-slate-200 text-slate-700"
             }`}
-            onClick={() => setFilter("Todas")}
+            onClick={() => alterStatus(0)}
           >
             <List />
             Todas
           </button>
           <button
             className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              filter === "Concluidas"
+              status === 2
                 ? "bg-primary text-white"
                 : "bg-slate-200 text-slate-700"
             }`}
-            onClick={() => setFilter("Concluidas")}
+            onClick={() => alterStatus(2)}
           >
             <CheckCircle />
             Concluídas
           </button>
           <button
             className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              filter === "Aguardando"
+              status === 1
                 ? "bg-primary text-white"
                 : "bg-slate-200 text-slate-700"
             }`}
-            onClick={() => setFilter("Aguardando")}
+            onClick={() => alterStatus(1)}
           >
             <Clock />
             Aguardando
@@ -176,83 +160,90 @@ const ApprovalTable = () => {
       </div>
 
       {/* Tabela */}
-      <div className="">
-        <table className="table-auto w-full border-collapse border border-gray-200">
-          <thead>
-            <tr className="bg-slate-100">
-              <th className="border border-gray-200 px-4 py-2 text-left">
-                <div className="flex items-center gap-2">
-                  <User />
-                  Nome
-                </div>
-              </th>
-              <th className="border border-gray-200 px-4 py-2 text-left">
-                <div className="flex items-center gap-2">
-                  <Mail />
-                  E-mail
-                </div>
-              </th>
-              <th className="border border-gray-200 px-4 py-2 text-left">
-                <div className="flex items-center gap-2">
-                  <Phone />
-                  Telefone
-                </div>
-              </th>
-              <th className="border border-gray-200 px-4 py-2 text-left">
-                <div className="flex items-center gap-2">
-                  <FileDigit />
-                  Conta Contrato
-                </div>
-              </th>
-              <th className="border border-gray-200 px-4 py-2 text-center">
-                <div className="flex items-center gap-2 justify-center">
-                  <CheckCircle />
-                  Status
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBudgets.map((budget) => (
-              <tr
-                key={budget.id}
-                className="hover:bg-slate-50 text-sm cursor-pointer"
-              >
-                <td className="border border-gray-200 px-4 py-2">
-                  {budget.nome}
-                </td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {budget.email}
-                </td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {budget.telefone}
-                </td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {budget.contaContrato}
-                </td>
-                <td className="border border-gray-200 px-4 py-2 text-center">
-                  {budget.status ? (
+      {loading ? (
+        <LoadingPartial />
+      ) : (
+        <>
+          <div className="">
+            <table className="table-auto w-full border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-slate-100">
+                  <th className="border border-gray-200 px-4 py-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <User />
+                      Nome
+                    </div>
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <Mail />
+                      E-mail
+                    </div>
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <Phone />
+                      Telefone
+                    </div>
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <FileDigit />
+                      Conta Contrato
+                    </div>
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2 text-center">
+                    <div className="flex items-center gap-2 justify-center">
+                      <CheckCircle />
+                      Status
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {approvals.map((approval) => (
+                  <tr
+                    key={approval.id}
+                    onClick={() => router.push(`/homologacao/${approval.id}`)}
+                    className="hover:bg-slate-50 text-sm cursor-pointer"
+                  >
+                    <td className="border border-gray-200 px-4 py-2">
+                      {approval.nome}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {approval.email}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {approval.telefone}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {approval.numero_conta_contrato}
+                    </td>
+                    {/* <td className="border border-gray-200 px-4 py-2 text-center">
+                  {approval.status ? (
                     <CheckCircle className="text-[#229718] mx-auto" />
                   ) : (
                     <Clock className="text-[#d6ae29] mx-auto" />
                   )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </td> */}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <div className="w-full flex justify-center mt-10">
-        <Pagination
-          showControls
-          initialPage={1}
-          page={page}
-          total={3}
-          onChange={(page) => setPage(page)}
-          color="primary"
-        />
-      </div>
+          <div className="w-full flex justify-center mt-10">
+            <Pagination
+              showControls
+              initialPage={1}
+              page={page}
+              total={data.totalPages}
+              onChange={(page) => alterPage(page)}
+              color="primary"
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
