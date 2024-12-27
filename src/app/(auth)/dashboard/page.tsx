@@ -1,8 +1,6 @@
 "use client"
 import { BarChartGraphic } from "@/components/BarChart/BarChart";
 import { LineChartGraphic } from "@/components/LineChart/LineChart";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
 
 export default function Dashboard() {
   return (

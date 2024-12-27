@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { formatText } from "@/utils/truncate";
 import LoadingPartial from "@/components/LoadingPartial/Loading";
+import ShowValue from "@/components/ShowValue/ShowValue";
+import ShowSelect from "@/components/ShowSelect/ShowSelect";
 
-interface Approval {
+export interface Approval {
   id: string;
   nome: string;
   email: string;
@@ -42,6 +44,7 @@ export default function Homologacoes() {
   const { findUnique } = useApproval();
   const { id } = useParams();
   const [approval, setApproval] = useState<Approval | null>(null);
+  const [approvalUpdate, setApprovalUpdate] = useState<Approval | null>(null);
   const [status, setStatus] = useState<boolean>(false);
   const [documents, setDocuments] = useState<any[]>([]);
   const [newDocument, setNewDocument] = useState<File | null>(null);
@@ -53,6 +56,7 @@ export default function Homologacoes() {
   const get = async () => {
     const data = await findUnique(String(id));
     setApproval(data);
+    setApprovalUpdate(data);
     setStatus(data?.status || false);
     setDocuments(data?.documentos || []);
   };
@@ -91,8 +95,88 @@ export default function Homologacoes() {
 
       {/* Informações principais */}
       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Detalhes</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Detalhes</h2>
+
+        <div className="grid grid-cols-4 gap-4 w-full">
+          <ShowValue
+            value={approvalUpdate?.nome}
+            setValue={setApprovalUpdate}
+            keyName="nome"
+            label="Nome"
+          />
+
+          <ShowValue
+            value={approvalUpdate?.email}
+            setValue={setApprovalUpdate}
+            keyName="email"
+            label="E-mail"
+          />
+
+          <ShowValue
+            value={approvalUpdate?.numero_conta_contrato}
+            setValue={setApprovalUpdate}
+            keyName="numero_conta_contrato"
+            label="Conta contrato"
+          />
+
+          <ShowValue
+            value={approvalUpdate?.telefone}
+            setValue={setApprovalUpdate}
+            keyName="telefone"
+            label="Telefone"
+            isEditable
+          />
+
+          <ShowSelect
+            value={String(approvalUpdate?.ampliacao)}
+            setValue={setApprovalUpdate}
+            keyName="ampliacao"
+            label="Ampliação"
+            isEditable={true}
+            options={[
+              { label: "Sim", value: "true" },
+              { label: "Não", value: "false" },
+            ]}
+          />
+
+          <ShowSelect
+            value={String(approvalUpdate?.transformador)}
+            setValue={setApprovalUpdate}
+            keyName="transformador"
+            label="Transformador próprio"
+            isEditable={true}
+            options={[
+              { label: "Sim", value: "true" },
+              { label: "Não", value: "false" },
+            ]}
+          />
+
+          <ShowSelect
+            value={approvalUpdate?.tipo_de_ligacao}
+            setValue={setApprovalUpdate}
+            keyName="tipo_de_ligacao"
+            label="Tipo de ligação"
+            isEditable={true}
+            options={[
+              { label: "MONOFÁSICA", value: "MONOFÁSICA" },
+              { label: "BIFÁSICA", value: "BIFÁSICA" },
+              { label: "TRIFÁSICA", value: "TRIFÁSICA" },
+            ]}
+          />
+
+          <ShowSelect
+            value={approvalUpdate?.tensao_de_fornecimento}
+            setValue={setApprovalUpdate}
+            keyName="tensao_de_fornecimento"
+            label="Tensão de fornecimento"
+            isEditable={true}
+            options={[
+              { label: "220/380", value: "220/380" },
+              { label: "127/220", value: "127/220" },
+            ]}
+          />
+
+         
         </div>
       </div>
 
