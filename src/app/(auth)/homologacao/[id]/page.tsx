@@ -35,6 +35,7 @@ export interface Approval {
   tipo_de_ligacao: string;
   total_de_inversores: string | null;
   total_de_modulos: string | null;
+  data_prevista: string | null;
   transformador: boolean;
   contas_receber_credito: any[];
   documentos: any[];
@@ -48,6 +49,21 @@ export default function Homologacoes() {
   const [status, setStatus] = useState<boolean>(false);
   const [documents, setDocuments] = useState<any[]>([]);
   const [newDocument, setNewDocument] = useState<File | null>(null);
+
+  const [isHaveChanges, setIsHaveChanges] = useState(false);
+
+  useEffect(() => {
+    const areDifferent = (a: Approval | null, b: Approval | null): boolean => {
+      if (a === null || b === null) return false;
+
+      return Object.keys(a).some(
+        (key) => a[key as keyof Approval] !== b[key as keyof Approval]
+      );
+    };
+
+    const isDifferent = areDifferent(approval, approvalUpdate);
+    setIsHaveChanges(isDifferent);
+  }, [approvalUpdate]);
 
   useEffect(() => {
     get();
@@ -85,7 +101,7 @@ export default function Homologacoes() {
     );
 
   return (
-    <main className="w-[calc(100vw-288px)] px-10 py-10 gap-4 flex flex-col">
+    <main className="w-[calc(100vw-288px)] px-10 py-10 gap-4 flex flex-col relative">
       <h1 className="text-2xl font-bold text-gray-800">
         Homologação de{" "}
         <span className="text-primary font-bold">
@@ -97,7 +113,7 @@ export default function Homologacoes() {
       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Detalhes</h2>
 
-        <div className="grid grid-cols-4 gap-4 w-full">
+        <div className="grid grid-cols-4 gap-y-3 gap-x-6 w-full mb-4">
           <ShowValue
             value={approvalUpdate?.nome}
             setValue={setApprovalUpdate}
@@ -132,7 +148,7 @@ export default function Homologacoes() {
             setValue={setApprovalUpdate}
             keyName="ampliacao"
             label="Ampliação"
-            isEditable={true}
+            isEditable
             options={[
               { label: "Sim", value: "true" },
               { label: "Não", value: "false" },
@@ -144,7 +160,7 @@ export default function Homologacoes() {
             setValue={setApprovalUpdate}
             keyName="transformador"
             label="Transformador próprio"
-            isEditable={true}
+            isEditable
             options={[
               { label: "Sim", value: "true" },
               { label: "Não", value: "false" },
@@ -156,7 +172,7 @@ export default function Homologacoes() {
             setValue={setApprovalUpdate}
             keyName="tipo_de_ligacao"
             label="Tipo de ligação"
-            isEditable={true}
+            isEditable
             options={[
               { label: "MONOFÁSICA", value: "MONOFÁSICA" },
               { label: "BIFÁSICA", value: "BIFÁSICA" },
@@ -169,14 +185,139 @@ export default function Homologacoes() {
             setValue={setApprovalUpdate}
             keyName="tensao_de_fornecimento"
             label="Tensão de fornecimento"
-            isEditable={true}
+            isEditable
             options={[
               { label: "220/380", value: "220/380" },
               { label: "127/220", value: "127/220" },
             ]}
           />
+          <ShowValue
+            value={approvalUpdate?.quantidade_medidores}
+            setValue={setApprovalUpdate}
+            keyName="quantidade_medidores"
+            label="Quantidade medidores"
+            isEditable
+          />
 
-         
+          <ShowValue
+            value={approvalUpdate?.modelo_do_inversor_homologado}
+            setValue={setApprovalUpdate}
+            keyName="modelo_do_inversor_homologado"
+            label="Modelo do inversor já homologado"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.quantidade_inversores_homologados}
+            setValue={setApprovalUpdate}
+            keyName="quantidade_inversores_homologados"
+            label="Quantidade inversores já homologados"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.modelo_do_modulo_homologado}
+            setValue={setApprovalUpdate}
+            keyName="modelo_do_modulo_homologado"
+            label="Modelo do módulo já homologado"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.quantidade_modulos_homologados}
+            setValue={setApprovalUpdate}
+            keyName="quantidade_modulos_homologados"
+            label="Quantidade módulos já homologados"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.modelo_do_inversor_inserido}
+            setValue={setApprovalUpdate}
+            keyName="modelo_do_inversor_inserido"
+            label="Modelo do inversor"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.quantidade_inversores_inseridos}
+            setValue={setApprovalUpdate}
+            keyName="quantidade_inversores_inseridos"
+            label="Quantidade inversores"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.modelo_do_modulo_inserido}
+            setValue={setApprovalUpdate}
+            keyName="modelo_do_modulo_inserido"
+            label="Modelo do módulo"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.quantidade_modulos_inseridos}
+            setValue={setApprovalUpdate}
+            keyName="quantidade_modulos_inseridos"
+            label="Quantidade módulos"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.total_de_inversores}
+            setValue={setApprovalUpdate}
+            keyName="total_de_inversores"
+            label="Total inversores"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.total_de_modulos}
+            setValue={setApprovalUpdate}
+            keyName="total_de_modulos"
+            label="Total módulos"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.distancia_entre_inversor_e_distribuicao}
+            setValue={setApprovalUpdate}
+            keyName="distancia_entre_inversor_e_distribuicao"
+            label="Distância do inversor e distribuição (m)"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.disjuntor_do_padrao}
+            setValue={setApprovalUpdate}
+            keyName="disjuntor_do_padrao"
+            label="Disjuntor do padrão (medidor)"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.cabo_do_padrao}
+            setValue={setApprovalUpdate}
+            keyName="cabo_do_padrao"
+            label="Cabo do padrão (medidor)"
+            isEditable
+          />
+
+          {/* <ShowValue
+            value={approvalUpdate?.carga_instalada}
+            setValue={setApprovalUpdate}
+            keyName="carga_instalada"
+            label="Carga instalada"
+            isEditable
+          />
+
+          <ShowValue
+            value={approvalUpdate?.data_prevista}
+            setValue={setApprovalUpdate}
+            keyName="data_prevista"
+            label="Data prevista para instalação"
+            isEditable
+          /> */}
         </div>
       </div>
 
@@ -258,6 +399,31 @@ export default function Homologacoes() {
           )}
         </div>
       </div>
+
+      {isHaveChanges && (
+        <div className="fixed bottom-10 right-10 w-96 p-5 bg-white rounded-lg shadow-lg border border-slate-200 flex flex-col justify-between">
+          <h1 className="text-lg font-semibold text-slate-800">
+            Salvar alterações?
+          </h1>
+          <div className="flex justify-end gap-4 mt-4">
+            <button
+              className="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 rounded-md hover:bg-slate-200 transition-all"
+              onClick={() => {
+                setApprovalUpdate(approval);
+                setIsHaveChanges(false);
+              }}
+            >
+              Cancelar
+            </button>
+            <button
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-all"
+              // onClick={handleSave}
+            >
+              Salvar
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

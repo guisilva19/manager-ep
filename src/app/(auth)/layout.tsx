@@ -30,7 +30,7 @@ export default function RootLayout({
 
   return (
     <>
-      <main className="w-screen h-screen flex overflow-x-hidden">
+      <main className="w-screen h-screen flex overflow-x-hidden overflow-diff">
         <SideBar />
         <div>{children}</div>
       </main>
