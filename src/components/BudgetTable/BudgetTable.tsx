@@ -249,16 +249,18 @@ const BudgetTable = () => {
             </table>
           </div>
 
-          <div className="w-full flex justify-center mt-10">
-            <Pagination
-              showControls
-              initialPage={1}
-              page={page}
-              total={data.totalPages}
-              onChange={(page) => alterPage(page)}
-              color="primary"
-            />
-          </div>
+          {!!data?.totalPages && (
+            <div className="w-full flex justify-center mt-10">
+              <Pagination
+                showControls
+                initialPage={1}
+                page={page}
+                total={data.totalPages}
+                onChange={(page) => alterPage(page)}
+                color="primary"
+              />
+            </div>
+          )}
         </>
       )}
     </div>

@@ -51,6 +51,7 @@ interface Approval {
   total_de_inversores: string | null;
   total_de_modulos: string | null;
   transformador: boolean;
+  status: boolean;
   contas_receber_credito: any[];
   documentos: any[];
 }
@@ -111,6 +112,8 @@ const ApprovalTable = () => {
     setPage(newPage);
   };
 
+  console.log("HERE", approvals);
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -165,7 +168,7 @@ const ApprovalTable = () => {
       ) : (
         <>
           <div className="">
-            <table className="table-auto w-full border-collapse border border-gray-200">
+            <table className="table-auto w-full border-collapse border border-gray-200 relative">
               <thead>
                 <tr className="bg-slate-100">
                   <th className="border border-gray-200 px-4 py-2 text-left">
@@ -200,48 +203,59 @@ const ApprovalTable = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {approvals.map((approval) => (
-                  <tr
-                    key={approval.id}
-                    onClick={() => router.push(`/homologacao/${approval.id}`)}
-                    className="hover:bg-slate-50 text-sm cursor-pointer"
-                  >
-                    <td className="border border-gray-200 px-4 py-2">
-                      {approval.nome}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {approval.email}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {approval.telefone}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {approval.numero_conta_contrato}
-                    </td>
-                    {/* <td className="border border-gray-200 px-4 py-2 text-center">
-                  {approval.status ? (
-                    <CheckCircle className="text-[#229718] mx-auto" />
-                  ) : (
-                    <Clock className="text-[#d6ae29] mx-auto" />
-                  )}
-                </td> */}
-                  </tr>
-                ))}
-              </tbody>
+
+              {approvals.length ? (
+                <tbody>
+                  {approvals.map((approval) => (
+                    <tr
+                      key={approval.id}
+                      onClick={() => router.push(`/homologacao/${approval.id}`)}
+                      className="hover:bg-slate-50 text-sm cursor-pointer"
+                    >
+                      <td className="border border-gray-200 px-4 py-2">
+                        {approval.nome}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {approval.email}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {approval.telefone}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {approval.numero_conta_contrato}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2 text-center">
+                        {approval.status ? (
+                          <CheckCircle className="text-[#229718] mx-auto" />
+                        ) : (
+                          <Clock className="text-[#d6ae29] mx-auto" />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <div className="h-12 absolute top-20 flex items-center justify-center inset-0">
+                  <p className="text-slate-500 font-">
+                    Nenhuma homologação existente!
+                  </p>
+                </div>
+              )}
             </table>
           </div>
 
-          <div className="w-full flex justify-center mt-10">
-            <Pagination
-              showControls
-              initialPage={1}
-              page={page}
-              total={data.totalPages}
-              onChange={(page) => alterPage(page)}
-              color="primary"
-            />
-          </div>
+          {!!data?.totalPages && (
+            <div className="w-full flex justify-center mt-10">
+              <Pagination
+                showControls
+                initialPage={1}
+                page={page}
+                total={data.totalPages}
+                onChange={(page) => alterPage(page)}
+                color="primary"
+              />
+            </div>
+          )}
         </>
       )}
     </div>

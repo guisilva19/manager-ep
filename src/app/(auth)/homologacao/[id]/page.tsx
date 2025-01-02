@@ -100,6 +100,8 @@ export default function Homologacoes() {
       </main>
     );
 
+  console.log(documents);
+
   return (
     <main className="w-[calc(100vw-288px)] px-10 py-10 gap-4 flex flex-col relative">
       <h1 className="text-2xl font-bold text-gray-800">
@@ -341,7 +343,7 @@ export default function Homologacoes() {
                       {formatText(doc.nome)}
                     </a>
                     <span className="ml-4 text-sm text-gray-500">
-                      {new Date(doc.created_at).toLocaleDateString()}
+                      {new Date(doc.criado_em).toLocaleDateString()}
                     </span>
                   </div>
                   <a
