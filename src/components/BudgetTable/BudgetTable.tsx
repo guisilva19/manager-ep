@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   CheckCircle,
   Clock,
@@ -25,7 +25,7 @@ interface Data {
   totalPages: number;
 }
 
-interface Budget {
+export interface Budget {
   id: string;
   nome: string;
   email: string;
@@ -35,11 +35,17 @@ interface Budget {
   local: string;
   status: boolean;
   valor_da_conta_de_luz: string;
-  created_at: string;
-  updated_at: string;
+  criado_em: string;
+  atualizado_em: string;
 }
 
-const BudgetTable = () => {
+const BudgetTable = ({
+  setBudget,
+  setIsModalBudget,
+}: {
+  setBudget: Dispatch<SetStateAction<Budget | null>>;
+  setIsModalBudget: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { list } = useBudget();
 
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -210,6 +216,10 @@ const BudgetTable = () => {
                 <tbody className="">
                   {budgets.map((budget: Budget) => (
                     <tr
+                      onClick={() => {
+                        setIsModalBudget((prev) => !prev);
+                        setBudget(budget)
+                      }}
                       key={budget.id}
                       className="hover:bg-slate-50 text-sm cursor-pointer"
                     >
@@ -235,7 +245,7 @@ const BudgetTable = () => {
                         {budget.endereco}
                       </td>
                       <td className="border border-gray-200 px-4 py-2">
-                        {formatDateToBR(budget.created_at)}
+                        {formatDateToBR(budget.criado_em)}
                       </td>
                       <td className="border border-gray-200 px-4 py-2 text-center">
                         {budget.status ? (
