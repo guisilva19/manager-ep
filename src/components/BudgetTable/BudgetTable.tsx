@@ -147,7 +147,7 @@ const BudgetTable = () => {
         <>
           {/* Tabela */}
           <div className="">
-            <table className="table-auto w-full border-collapse border border-gray-200">
+            <table className="table-auto w-full border-collapse border border-gray-200 relative">
               <thead>
                 <tr className="bg-slate-100">
                   <th className="border border-gray-200 px-4 py-2 text-left">
@@ -206,46 +206,52 @@ const BudgetTable = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="">
-                {budgets.map((budget: Budget) => (
-                  <tr
-                    key={budget.id}
-                    className="hover:bg-slate-50 text-sm cursor-pointer"
-                  >
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.nome}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.email}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.telefone}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.local}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.valor_da_conta_de_luz}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.cidade}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {budget.endereco}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2">
-                      {formatDateToBR(budget.created_at)}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-2 text-center">
-                      {budget.status ? (
-                        <CheckCircle className="text-[#229718] mx-auto" />
-                      ) : (
-                        <Clock className="text-[#d6ae29] mx-auto" />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              {budgets.length ? (
+                <tbody className="">
+                  {budgets.map((budget: Budget) => (
+                    <tr
+                      key={budget.id}
+                      className="hover:bg-slate-50 text-sm cursor-pointer"
+                    >
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.nome}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.email}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.telefone}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.local}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.valor_da_conta_de_luz}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.cidade}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {budget.endereco}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {formatDateToBR(budget.created_at)}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2 text-center">
+                        {budget.status ? (
+                          <CheckCircle className="text-[#229718] mx-auto" />
+                        ) : (
+                          <Clock className="text-[#d6ae29] mx-auto" />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <div className="h-12 absolute top-20 flex items-center justify-center inset-0">
+                  <p className="text-slate-500 font-">Nenhum orçamento.</p>
+                </div>
+              )}
             </table>
           </div>
 

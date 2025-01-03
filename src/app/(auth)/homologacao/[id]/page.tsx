@@ -2,11 +2,13 @@
 import { useApproval } from "@/hook/useApproval";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Download } from "lucide-react";
+import { CheckCheck, Download } from "lucide-react";
 import { formatText } from "@/utils/truncate";
 import LoadingPartial from "@/components/LoadingPartial/Loading";
 import ShowValue from "@/components/ShowValue/ShowValue";
 import ShowSelect from "@/components/ShowSelect/ShowSelect";
+import { Switch } from "@nextui-org/react";
+import Snippet from "@/components/Snippet/Snippet";
 
 export interface Approval {
   id: string;
@@ -14,8 +16,8 @@ export interface Approval {
   email: string;
   ampliacao: boolean;
   telefone: string;
-  link_payment: string;
-  status_payment: boolean;
+  link_pagamento: string;
+  status_pagamento: boolean;
   cabo_do_padrao: string;
   carga_instalada: string | null;
   disjuntor_do_padrao: string | null;
@@ -37,6 +39,7 @@ export interface Approval {
   total_de_modulos: string | null;
   data_prevista: string | null;
   transformador: boolean;
+  status: boolean;
   contas_receber_credito: any[];
   documentos: any[];
 }
@@ -99,8 +102,6 @@ export default function Homologacoes() {
         <LoadingPartial />;
       </main>
     );
-
-  console.log(documents);
 
   return (
     <main className="w-[calc(100vw-288px)] px-10 py-10 gap-4 flex flex-col relative">
@@ -304,23 +305,59 @@ export default function Homologacoes() {
             label="Cabo do padrão (medidor)"
             isEditable
           />
-
-          {/* <ShowValue
-            value={approvalUpdate?.carga_instalada}
-            setValue={setApprovalUpdate}
-            keyName="carga_instalada"
-            label="Carga instalada"
-            isEditable
-          />
-
-          <ShowValue
-            value={approvalUpdate?.data_prevista}
-            setValue={setApprovalUpdate}
-            keyName="data_prevista"
-            label="Data prevista para instalação"
-            isEditable
-          /> */}
         </div>
+      </div>
+
+      {/* Status gerais */}
+      <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 w-full gap-14 flex">
+        <section className="flex w-4/12 justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-800">Status</h2>
+
+          <div className="flex items-center gap-3">
+            <p className="text-slate-600">
+              {approvalUpdate?.status ? "Aguardando" : "Finalizado"}
+            </p>
+            <Switch
+              checked={approvalUpdate?.status}
+              color="primary"
+              startContent={<CheckCheck color="#fff" />}
+              size="md"
+              onValueChange={(value) => {
+                if (approvalUpdate) {
+                  setApprovalUpdate({ ...approvalUpdate, status: value });
+                }
+              }}
+            />
+          </div>
+        </section>
+
+        <section className="flex w-4/12 justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-800">Status Pagamento</h2>
+
+          <div className="flex items-center gap-3">
+            <p>
+              {approvalUpdate?.status_pagamento ? "Aguardando" : "Finalizado"}
+            </p>
+            <Switch
+              checked={approvalUpdate?.status_pagamento}
+              color="primary"
+              startContent={<CheckCheck color="#fff" />}
+              size="md"
+              onValueChange={(value) => {
+                if (approvalUpdate) {
+                  setApprovalUpdate({ ...approvalUpdate, status_pagamento: value });
+                }
+              }}
+            />
+          </div>
+        </section>
+
+        <section className="flex w-6/12 justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-800">Link Pagamento</h2>
+          <Snippet
+            content={approval?.link_pagamento || "Nenhum link disponível"}
+          />
+        </section>
       </div>
 
       <div className="flex w-full gap-4">

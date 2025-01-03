@@ -29,8 +29,8 @@ interface Approval {
   email: string;
   ampliacao: boolean;
   telefone: string;
-  link_payment: string;
-  status_payment: boolean;
+  link_pagamento: string;
+  status_pagamento: boolean;
   cabo_do_padrao: string;
   carga_instalada: string | null;
   disjuntor_do_padrao: string | null;
@@ -111,8 +111,6 @@ const ApprovalTable = () => {
     setLoading(true);
     setPage(newPage);
   };
-
-  console.log("HERE", approvals);
 
   return (
     <div className="container mx-auto p-4">
@@ -237,7 +235,7 @@ const ApprovalTable = () => {
               ) : (
                 <div className="h-12 absolute top-20 flex items-center justify-center inset-0">
                   <p className="text-slate-500 font-">
-                    Nenhuma homologação existente!
+                    Nenhuma homologação!
                   </p>
                 </div>
               )}
